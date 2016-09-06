@@ -78,6 +78,13 @@ namespace CFFinancialPortal.Models
         public string PhoneNumber { get; set; }
     }
 
+    public class EditProfileViewModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+    }
+
     public class ConfigureTwoFactorViewModel
     {
         public string SelectedProvider { get; set; }

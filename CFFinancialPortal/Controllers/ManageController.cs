@@ -322,6 +322,40 @@ namespace CFFinancialPortal.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
+         private ApplicationDbContext db = new ApplicationDbContext();
+
+        // GET: /Manage/EditProfile
+        public ActionResult EditProfile()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Manage/EditProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(EditProfileViewModel model)
+        {
+
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            // Generate the token and send it
+            if (User.Identity.GetUserId() != null)
+            {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                var updateResult = await UserManager.UpdateAsync(user);
+
+            }
+            return RedirectToAction("Index", "Manage");
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

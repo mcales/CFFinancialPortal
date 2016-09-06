@@ -11,15 +11,36 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using CFFinancialPortal.Models;
+using SendGrid;
+using System.Net.Mail;
+using System.Configuration;
 
 namespace CFFinancialPortal
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            var apiKey = ConfigurationManager.AppSettings["SendGridAPIkey"];
+            var from = ConfigurationManager.AppSettings["ContactEmail"];
+            SendGridMessage myMessage = new SendGridMessage();
+            myMessage.AddTo(message.Destination);
+            myMessage.From = new MailAddress(from);
+            myMessage.Subject = message.Subject;
+            myMessage.Html = message.Body;
+
+            //create a web transport for sending email
+            var transportWeb = new Web(apiKey);
+            try
+            {
+                await transportWeb.DeliverAsync(myMessage);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                await Task.FromResult(0);
+            }
         }
     }
 
