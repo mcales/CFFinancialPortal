@@ -25,7 +25,7 @@ namespace CFFinancialPortal.Migrations
             //      new Person { FullName = "Brice Lambson" },
             //      new Person { FullName = "Rowan Miller" }
             //    );
-            // nope
+            // pls
         }
     }
 }
